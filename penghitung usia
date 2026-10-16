@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penghitung Usia</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            background-color: #f0f4f8;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            margin: auto;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 17px;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <label for="tanggalLahir">16 july 2007</label>
+
+        <input type="date" id="tanggalLahir">
+
+        <p id="hasil"></p>
+    </div>
+
+    <script>
+        const inputTanggal = document.getElementById("tanggalLahir");
+        const hasil = document.getElementById("hasil");
+
+        inputTanggal.addEventListener("input", function () {
+            if (!inputTanggal.value) {
+                hasil.textContent = "";
+                return;
+            }
+
+            const [tahunLahir, bulanLahir, hariLahir] =
+                inputTanggal.value.split("-").map(Number);
+
+            const lahir = new Date(
+                tahunLahir, bulanLahir - 1, hariLahir
+            );
+
+            const sekarang = new Date();
+            sekarang.setHours(0, 0, 0, 0);
+
+            if (lahir > sekarang) {
+                hasil.textContent = "Tanggal lahir tidak valid.";
+                return;
+            }
+
+            let tahun = sekarang.getFullYear() - tahunLahir;
+            let bulan = sekarang.getMonth() - (bulanLahir - 1);
+            let hari = sekarang.getDate() - hariLahir;
+
+            if (hari < 0) {
+                bulan--;
+
+                const hariBulanSebelumnya = new Date(
+                    sekarang.getFullYear(),
+                    sekarang.getMonth(),
+                    0
+                ).getDate();
+
+                hari += hariBulanSebelumnya;
+            }
+
+            if (bulan < 0) {
+                tahun--;
+                bulan += 12;
+            }
+
+            hasil.textContent =
+                `Kamu sudah berusia ${tahun} tahun ${bulan} bulan ${hari} hari`;
+        });
+    </script>
+
+</body>
+</html>
